@@ -15,8 +15,8 @@ describe("Band, Musician, and Song Models", () => {
 
   test("can create a Band", async () => {
     // TODO - test creating a band
-    const testBand = await Band.create({ name: "jytegy", genre: "blues" });
-    expect(testBand.name).toBe("jytegy");
+    const testBandToDelete = await Band.create({ name: "jytegy", genre: "blues" });
+    expect(testBandToDelete.name).toBe("jytegy");
   });
 
   test("can create a Musician", async () => {
@@ -30,12 +30,15 @@ describe("Band, Musician, and Song Models", () => {
 
   test("can update a Band", async () => {
     // TODO - test updating a band
-    const testBand = await Band.create({ name: "jytegy", genre: "blues" });
-    let updatedBand = await testBand.update({name: "Baty"}, {
-      where: {
-        name: "jytegy"
+    const testBandToDelete = await Band.create({ name: "jytegy", genre: "blues" });
+    let updatedBand = await testBandToDelete.update(
+      { name: "Baty" },
+      {
+        where: {
+          name: "jytegy",
+        },
       }
-    })
+    );
     expect(updatedBand.name).toBe("Baty");
   });
 
@@ -45,27 +48,30 @@ describe("Band, Musician, and Song Models", () => {
       name: "Jlow",
       instrument: "Violin",
     });
-    let updatedMusician = await testMusician.update({name: 'Bandz'}, {
-      where : {
-        name: "Jlow"
+    let updatedMusician = await testMusician.update(
+      { name: "Bandz" },
+      {
+        where: {
+          name: "Jlow",
+        },
       }
-    })
+    );
     expect(updatedMusician.name).toBe("Bandz");
   });
 
   test("can delete a Band", async () => {
     // TODO - test deleting a band
-    const testBand = await Band.create({ name: "jytegy", genre: "blues" });
-    const deletedBand =  await Band.destroy({
-      where: {
-        name: "jytegy"
-      }
-    })
-    expect(deletedBand).toBe("EXPECTED VALUE HERE");
+    const testBandToDelete = await Band.create({ name: "Band to delete", genre: "hiphop" });
+    await testBandToDelete.destroy();
+    const deletedBand = await Band.findByPk(testBandToDelete.id)
+    expect(deletedBand).toBeNull();
   });
 
   test("can delete a Musician", async () => {
     // TODO - test deleting a musician
-    expect("NO TEST").toBe("EXPECTED VALUE HERE");
+    const musicianToDelete = await Musician.create({ name: "Musician to delete", genre: "hiphop" });
+    await musicianToDelete.destroy();
+    const deletedMusician = await Musician.findByPk(musicianToDelete.id)
+    expect(deletedMusician).toBeNull();
   });
 });
